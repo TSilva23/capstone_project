@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Detail</title>
+</head>
+<body>
+    <h2>Stock Detail</h2>
+    <p>Symbol: {{ stock_data['Global Quote']['01. symbol'] }}</p>
+    <p>Price: {{ stock_data['Global Quote']['05. price'] }}</p>
+    <p>Previous Close: {{ stock_data['Global Quote']['08. previous close'] }}</p>
+    <a href="/portfolio">Back to Portfolio</a>
+</body>
+</html>

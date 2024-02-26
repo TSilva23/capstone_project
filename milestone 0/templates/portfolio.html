@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+</head>
+<body>
+    <h2>Portfolio</h2>
+    <p>Welcome, {{ session['username'] }}!</p>
+    <h3>Your Stocks:</h3>
+    <ul>
+        {% for symbol, data in portfolio_data.items() %}
+            <li>{{ symbol }} - {{ data['Global Quote']['05. price'] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/logout">Logout</a>
+</body>
+</html>
+
