@@ -20,6 +20,10 @@ def get_stock_data(symbol):
     data = response.json()
     return data
 
+@app.route('/')
+def home():
+    return render_template('home.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
