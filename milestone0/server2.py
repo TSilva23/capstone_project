@@ -4,9 +4,13 @@ import json
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-
+filename = 'mock_user_data.json'
 
 ALPHA_VANTAGE_API_KEY = 'ODZGB30C5GO5UP3G'
+
+def write_to_file(data):
+    with open(filename, 'w') as file:
+        json.dump(data, file)
 
 # Mock user data (you would replace this with a database)
 users = {
@@ -46,15 +50,27 @@ def portfolio():
     username = session['username']
     portfolio = users[username]['portfolio']
     portfolio_data = {}
+    total_value = 0
     for symbol in portfolio:
-        portfolio_data[symbol] = get_stock_data(symbol)
-    return render_template('portfolio.html', portfolio_data=portfolio_data)
+        stock_data = get_stock_data(symbol)
+        if 'Global Quote' in stock_data and '05. price' in stock_data['Global Quote']:
+            price = float(stock_data['Global Quote']['05. price'])
+            portfolio_data[symbol] = stock_data
+            total_value += price
+        else:
+            portfolio_data[symbol] = {'Global Quote': {'05. price': 'N/A'}}
+    return render_template('portfolio.html', portfolio_data=portfolio_data, total_value=total_value)
 
 @app.route('/search', methods=['POST'])
 def search():
     if 'username' not in session:
         return redirect(url_for('login'))
     symbol = request.form['symbol'].upper()
+    stock_data = get_stock_data(symbol)
+    return render_template('stock_detail.html', stock_data=stock_data)
+
+@app.route('/{symbol}')
+def stock_detail(symbol):
     stock_data = get_stock_data(symbol)
     return render_template('stock_detail.html', stock_data=stock_data)
 
