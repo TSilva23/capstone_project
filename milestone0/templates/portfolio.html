@@ -15,6 +15,20 @@
         {% endfor %}
     </ul>
     <h3>Total Portfolio Value: {{ total_value }}</h3>
+
+    <form action="/add_symbol" method="post">
+        <input type="text" name="symbol" required>
+        <button type="submit">Add Symbol</button>
+    </form>
+
+    {% for symbol, data in portfolio_data.items() %}
+    <div>
+        {{ symbol }}: {{ data['Global Quote']['05. price'] }} 
+        <form action="/remove_symbol/{{ symbol }}" method="post">
+            <button type="submit">Remove</button>
+        </form>
+    </div>
+{% endfor %}
     <a href="/logout">Logout</a>
 </body>
 </html>
