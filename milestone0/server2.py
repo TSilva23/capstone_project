@@ -43,6 +43,34 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
+def add_symbol_to_portfolio(username, symbol):
+    if symbol not in users[username]['portfolio']:
+        users[username]['portfolio'].append(symbol)
+        write_to_file(users)
+
+def remove_symbol_from_portfolio(username, symbol):
+    if symbol in users[username]['portfolio']:
+        users[username]['portfolio'].remove(symbol)
+        write_to_file(users)
+
+@app.route('/add_symbol', methods=['POST'])
+def add_symbol_route():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    symbol = request.form['symbol'].upper()
+    add_symbol_to_portfolio(username, symbol)
+    return redirect(url_for('portfolio'))
+
+@app.route('/remove_symbol', methods=['POST'])
+def remove_symbol_route():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    symbol = request.form['symbol'].upper()
+    remove_symbol_from_portfolio(username, symbol)
+    return redirect(url_for('portfolio'))
+
 @app.route('/portfolio')
 def portfolio():
     if 'username' not in session:
