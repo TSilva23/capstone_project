@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 filename = 'mock_user_data.json'
 
-ALPHA_VANTAGE_API_KEY = 'ODZGB30C5GO5UP3G'
+ALPHA_VANTAGE_API_KEY = 'ZBD3QIPITMQNSPPF'
 
 def write_to_file(data):
     with open(filename, 'w') as file:
@@ -22,6 +22,8 @@ def get_stock_data(symbol):
     url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={ALPHA_VANTAGE_API_KEY}"
     response = requests.get(url)
     data = response.json()
+    print(data)  # Temporarily print data for debugging
+
     return data
 
 @app.route('/')
@@ -96,6 +98,10 @@ def search():
     symbol = request.form['symbol'].upper()
     stock_data = get_stock_data(symbol)
     return render_template('stock_detail.html', stock_data=stock_data)
+
+@app.route('/all_stocks')
+def all_stocks():
+    return render_template('all_stocks.html')
 
 @app.route('/{symbol}')
 def stock_detail(symbol):
